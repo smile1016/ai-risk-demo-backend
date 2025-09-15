@@ -5,7 +5,7 @@ mock 模式（默认）：
 ﻿
 cd backend
 node index.js
-# 或：MODE=mock node index.js
+或：MODE=mock node index.js
 
 
 
