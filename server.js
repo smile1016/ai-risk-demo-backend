@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const OpenAI = require("openai");
 const result = require("./mock");
+const buildRiskPrompt = require("./prompt");
 
 const modeEnv = process.env.MODE || "ai";
 
@@ -30,27 +31,8 @@ app.post("/predict-risk", async (req, res) => {
       const tasks = req.body.tasks || [];
 
       // 将任务转为文本，交给 OpenAI
-      const prompt = `
-        你是一个项目风险分析助手。现在给你一组项目任务，请你识别每个任务的潜在风险，并以 JSON 数组的形式输出。
-        分类范围请从以下选项中选择：
-        - 进度风险
-        - 质量风险
-        - 资源风险
-        - 依赖风险
-        - 合规风险
-        - 其他
+      const prompt= buildRiskPrompt(tasks)
 
-        输出 JSON 格式数组，包含字段：
-        - whole_identifier (任务ID)
-        - title (任务名)
-        - type (风险类型：延期/质量/资源/其他)
-        - probability (风险概率：0-1之间的浮点数)
-        - impact (风险影响程度：0-1之间的浮点数)
-        - risk_score (风险得分：0-1之间的浮点数，计算方式：probability * impact)
-        - reason (简要说明原因)
-
-        任务数据：${JSON.stringify(tasks, null, 2)}
-      `;
 
       const completion = await client.chat.completions.create({
         model: "deepseek-chat",
@@ -61,7 +43,7 @@ app.post("/predict-risk", async (req, res) => {
       const text = completion.choices[0].message.content;
       console.log("AI 返回原文:", text);
 
-      const jsonMatch = text.match(/\[([\s\S]*?)\]/);
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         risks = JSON.parse(jsonMatch[0]); // 提取到的就是纯 JSON 数组
       } else {
