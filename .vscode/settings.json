@@ -1,0 +1,33 @@
+{
+  // 启用保存时自动格式化
+  "editor.formatOnSave": true,
+
+  // 启用粘贴时格式化
+  "editor.formatOnPaste": true,
+
+  // 设置默认格式化工具为 Prettier
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // 针对不同文件类型的格式化配置
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+
+  // Prettier 配置
+  "prettier.requireConfig": false,
+  "prettier.useEditorConfig": true,
+
+  // 其他编辑器配置
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true
+}
