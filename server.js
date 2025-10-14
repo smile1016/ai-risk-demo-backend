@@ -31,25 +31,25 @@ app.post("/predict-risk", async (req, res) => {
 
       // 将任务转为文本，交给 OpenAI
       const prompt = `
-  你是一个项目风险分析助手。现在给你一组项目任务，请你识别每个任务的潜在风险，并以 JSON 数组的形式输出。
-  分类范围请从以下选项中选择：
-  - 进度风险
-  - 质量风险
-  - 资源风险
-  - 依赖风险
-  - 合规风险
-  - 其他
-  
-  输出 JSON 格式数组，包含字段：
-  - whole_identifier (任务ID)
-  - title (任务名)
-  - type (风险类型：延期/质量/资源/其他)
-  - probability (风险概率：0-1之间的浮点数)
-  - impact (风险影响程度：0-1之间的浮点数)
-  - risk_score (风险得分：0-1之间的浮点数，计算方式：probability * impact)
-  - reason (简要说明原因)
-  
-  任务数据：${JSON.stringify(tasks, null, 2)}
+        你是一个项目风险分析助手。现在给你一组项目任务，请你识别每个任务的潜在风险，并以 JSON 数组的形式输出。
+        分类范围请从以下选项中选择：
+        - 进度风险
+        - 质量风险
+        - 资源风险
+        - 依赖风险
+        - 合规风险
+        - 其他
+
+        输出 JSON 格式数组，包含字段：
+        - whole_identifier (任务ID)
+        - title (任务名)
+        - type (风险类型：延期/质量/资源/其他)
+        - probability (风险概率：0-1之间的浮点数)
+        - impact (风险影响程度：0-1之间的浮点数)
+        - risk_score (风险得分：0-1之间的浮点数，计算方式：probability * impact)
+        - reason (简要说明原因)
+
+        任务数据：${JSON.stringify(tasks, null, 2)}
       `;
 
       const completion = await client.chat.completions.create({
@@ -84,7 +84,7 @@ app.post("/predict-risk", async (req, res) => {
 });
 
 // Mock 导入 pingcode 数据
-app.post("/import/pingcode-mock", (req, res) => {
+app.get("/import/pingcode-mock", (req, res) => {
   const tasks = [
     {
       whole_identifier: "PJM-101",
@@ -155,9 +155,12 @@ app.post("/import/pingcode-mock", (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () =>
-  console.log(`✅ Risk server running at http://localhost:${port}`)
-);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`✅ Risk server running at http://localhost:${port}`);
+  console.log(`可从以下地址访问：`);
+  console.log(`  - http://localhost:${port}`);
+  console.log(`  - http://127.0.0.1:${port}`);
+});
 
 // {
 //   "_id": "68d4f1cbc9c2c7998fee8866",
